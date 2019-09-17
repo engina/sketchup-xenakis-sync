@@ -88,19 +88,37 @@ module XenakisExtension
   end
   
   unless file_loaded?(__FILE__)
+    FILENAMESPACE = File.basename( __FILE__, '.rb' )
+    PATH_ROOT     = File.dirname( __FILE__ ).freeze
+    PATH          = File.join( PATH_ROOT, FILENAMESPACE ).freeze
+    puts PATH_ROOT
     toolbar = UI::Toolbar.new "Xenakis"
-    cmd = UI::Command.new("Sync") {
+    syncCmd = UI::Command.new("Sync") {
       self.sync
     }
+    addReceiverCmd = UI::Command.new("Add Receiver") {
+      Sketchup.active_model.import(File.join(PATH_ROOT, 'Receiver.skp'))
+    }
+    addSourceCmd = UI::Command.new("Add Source") {
+      Sketchup.active_model.import(File.join(PATH_ROOT, 'Source.skp'))
+    }
     if RUBY_PLATFORM.include? 'darwin'
-      cmd.large_icon = "logo.pdf"
+      syncCmd.small_icon = syncCmd.large_icon = "logo.pdf"
+      addSourceCmd.small_icon = addSourceCmd.large_icon = "Source.pdf"
+      addReceiverCmd.small_icon = addReceiverCmd.large_icon = "Receiver.pdf"
     elsif RUBY_PLATFORM.include? 'mingw'
-      cmd.large_icon = "logo.svg"
+      cmd2.large_icon = cmd3.large_icon = syncCmd.large_icon = "logo.svg"
     end
-    cmd.tooltip = "Sync with Xenakis"
-    cmd.status_bar_text = "Sync with Xenakis Acoustic Analysis Tool"
-    cmd.menu_text = "Test"
-    toolbar = toolbar.add_item cmd
+    syncCmd.tooltip = "Sync with Xenakis"
+    syncCmd.status_bar_text = "Sync with Xenakis Acoustic Analysis Tool"
+    syncCmd.menu_text = "Test"
+
+    addReceiverCmd.status_bar_text = addReceiverCmd.menu_text = addReceiverCmd.tooltip = "Add receiver"
+    addSourceCmd.menu_text = addSourceCmd.status_bar_text = addSourceCmd.tooltip = "Add source"
+
+    toolbar = toolbar.add_item syncCmd
+    toolbar = toolbar.add_item addSourceCmd
+    toolbar = toolbar.add_item addReceiverCmd
     toolbar.show
     file_loaded(__FILE__)
   end

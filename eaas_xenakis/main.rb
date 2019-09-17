@@ -107,7 +107,9 @@ module XenakisExtension
       addSourceCmd.small_icon = addSourceCmd.large_icon = "Source.pdf"
       addReceiverCmd.small_icon = addReceiverCmd.large_icon = "Receiver.pdf"
     elsif RUBY_PLATFORM.include? 'mingw'
-      cmd2.large_icon = cmd3.large_icon = syncCmd.large_icon = "logo.svg"
+      syncCmd.small_icon = syncCmd.large_icon = "logo.svg"
+      addSourceCmd.small_icon = addSourceCmd.large_icon = "Source.svg"
+      addReceiverCmd.small_icon = addReceiverCmd.large_icon = "Receiver.svg"
     end
     syncCmd.tooltip = "Sync with Xenakis"
     syncCmd.status_bar_text = "Sync with Xenakis Acoustic Analysis Tool"
